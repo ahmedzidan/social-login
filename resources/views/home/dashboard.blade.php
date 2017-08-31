@@ -3,6 +3,7 @@
     <head>
         <title>GeoComplete</title>
         <meta charset="UTF-8">
+        <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
         <!-- Fonts -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
         <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
@@ -46,7 +47,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
-                       
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ session('username') }} <span class="caret"></span>
@@ -56,13 +57,13 @@
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
-                        
+
                     </ul>
                 </div>
             </div>
         </nav>
 
-      <!-- -------------------body ------------------ -->
+        <!-- -------------------body ------------------ -->
         <div class="container">
             <form  class="form-inline">
                 <div class="form-group">
@@ -75,10 +76,79 @@
 
             <div class="map_canvas"></div>    
         </div>
-      
-      
 
 
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    @if(null !=session('message'))
+                    <div class="alert alert-success">
+                        <ul>
+                            {{ session('message') }}
+                        </ul>
+                    </div>
+                    @endif
+                    <!-- to display errors returned by createToken -->
+
+                    <form action="{{ url('checkout') }}" method="POST" id="payment-form">
+                        {{ csrf_field() }}
+                        <label>Enter Amount Due:</label>
+                        <center>
+                            <div class="form-group">
+
+                                <label for="donationAmt"
+                                       style="float:left; font-size: 22px;margin-top: 1.2%;">$</label>
+                                <input
+                                    class="form-control"
+                                    type="number"
+                                    name="donationAmt"
+                                    id="custom-donation-amount"
+
+
+                                    style="width:90%"
+                                    min="0"
+                                    step="10.01"
+
+                                    />
+
+                            </div>
+
+
+                            <!-- data-image="images/button.png" -->
+                            <script src="https://checkout.stripe.com/checkout.js"
+                                    class="stripe-button"
+                                    data-key="pk_test_KNKzERBbQsLTSZEvyiHTLV9b"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-name="usqtech.com"
+                                    data-label="Pay with Card"
+                                    data-description="Fund"
+                                    data-amount="0">
+                            </script>
+
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('.donate-button').click(function (event) {
+                                        var amount = $('#custom-donation-amount').val();
+                                        $('.stripe-button').attr('data-amount', amount)
+                                    });
+                                });
+                            </script>
+
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -89,20 +159,27 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
         <script src="{{ asset('public/js/jquery.geocomplete.js') }}"></script>
-
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="https://js.stripe.com/v2/"></script>
 
         <script>
-$(function () {
+                                $(function () {
 
-    var options = {
-        map: ".map_canvas",
-        location: "Egypt"
-    };
+                                    var options = {
+                                        map: ".map_canvas",
+                                        location: "Egypt"
+                                    };
 
-    $("#geocomplete").geocomplete(options);
+                                    $("#geocomplete").geocomplete(options);
 
-});
+                                });
         </script>
+        <script>
+            function setTwoNumberDecimal() {
+                $('#custom-donation-amount').val(parseFloat($('#custom-donation-amount').val()).toFixed(2));
+            }
+        </script>
+
     </body>
 </html>
 

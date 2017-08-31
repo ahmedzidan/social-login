@@ -31,8 +31,8 @@ return [
 
     'stripe' => [
         'model' => App\User::class,
-        'key' => env('STRIPE_KEY'),
-        'secret' => env('STRIPE_SECRET'),
+        'key' => 'pk_test_KNKzERBbQsLTSZEvyiHTLV9b',
+        'secret' => 'sk_test_RWCq9Wopj90cA7JYtmzZmGpb',
     ],
     'facebook' => [
     'client_id' => '1918655558409277',

@@ -22,3 +22,4 @@ Route::get('/callback', 'SocialAuthFacebookController@callback');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', 'HomeController@logout');
+Route::post('checkout','HomeController@checkout');
